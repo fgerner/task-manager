@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
+
 const faker = require('faker');
 
 mongoose.connect('mongodb://localhost:27017/task-manager-api', {
@@ -8,16 +10,42 @@ mongoose.connect('mongodb://localhost:27017/task-manager-api', {
 });
 
 const User = mongoose.model('User', {
-    name: {type: String, required: true},
-    age: {type: Number, validate(value) {
-        if (value < 0){
-            throw new Error('Age needs to be a positive number');
+    name: {type: String, required: true, trim: true},
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        toLowerCase: true,
+        validate(value) {
+            if (!validator.isEmail(value)) {
+                throw new Error('Email is invalid.');
+            }
         }
-        }}
+    },
+    password: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 7,
+        validate(value) {
+            if (value.toLowerCase().includes('password')) {
+                throw new Error('Password cannot contain "password"')
+            };
+        }
+    },
+    age: {
+        type: Number,
+        default: 0,
+        validate(value) {
+            if (value < 0) {
+                throw new Error('Age needs to be a positive number');
+            }
+        }
+    }
 });
 
 const Task = mongoose.model('Task', {
-    description: {type: String, required: true},
+    description: {type: String, required: true, trim: true},
     completed: {type: Boolean, default: false}
 });
 
@@ -34,7 +62,9 @@ task.save().then(() => {
 
 const me = new User({
     name: faker.name.firstName(),
-    age: Math.floor(Math.random() * 100 + 21)
+    password: faker.lorem.words(2),
+    email: faker.internet.email(),
+    age: Math.floor(Math.random() * 79 + 21)
 })
 
 me.save().then(() => {

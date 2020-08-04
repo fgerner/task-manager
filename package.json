@@ -9,12 +9,12 @@
   "author": "fred",
   "license": "ISC",
   "devDependencies": {
-    "fake": "^0.2.2",
     "faker": "^4.1.0",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
     "mongodb": "^3.6.0",
-    "mongoose": "^5.9.27"
+    "mongoose": "^5.9.27",
+    "validator": "^13.1.1"
   }
 }
