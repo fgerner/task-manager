@@ -8,39 +8,42 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json())
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
     const user = new User(req.body)
-    user.save().then(() => {
+    try {
+        await user.save();
         res.statusCode = 201;
         res.send(user);
-    }).catch((e) => {
+    } catch (e) {
         res.statusCode = 400;
         res.send(e);
-    });
+    }
 });
 
-app.get('/users', (req, res) => {
-    User.find({}).then((users) => {
+app.get('/users', async (req, res) => {
+    try {
+        const users = await User.find({});
         res.send(users);
-    }).catch((e) => {
+    } catch (e) {
         res.statusCode = 500;
         res.send(e);
-    });
+    }
 });
 
-app.get('/users/:id', (req, res) => {
+app.get('/users/:id', async (req, res) => {
     const _id = req.params.id;
-    User.findById(_id).then((user) => {
+
+    try {
+        const user = await User.findById(_id);
         if (!user) {
             res.statusCode = 404;
-            return res.send('User not found');
+            return res.send('User not found.');
         }
         res.send(user);
-    }).catch((e) => {
+    } catch (e) {
         res.statusCode = 500;
         res.send(e);
-    })
-
+    }
 })
 
 app.post('/tasks', (req, res) => {
