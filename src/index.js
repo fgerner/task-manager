@@ -67,6 +67,20 @@ app.patch('/users/:id', async (req, res) => {
         res.send(e);
     }
 });
+d
+app.delete('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (!user) {
+            res.statusCode = 404;
+            return res.send('User not found.');
+        }
+        res.send(user);
+    } catch (e) {
+        res.statusCode = 500;
+        res.send(e);
+    }
+})
 
 app.post('/tasks', async (req, res) => {
     const task = new Task(req.body)
@@ -114,7 +128,7 @@ app.patch('/tasks/:id', async (req, res) => {
     }
     try {
         const task = await Task.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidations: true});
-        if (!task){
+        if (!task) {
             res.statusCode = 404;
             return res.send('Task not found.');
         }
@@ -123,7 +137,21 @@ app.patch('/tasks/:id', async (req, res) => {
         res.statusCode = 500;
         res.send(e);
     }
-})
+});
+
+app.delete('/tasks/:id', async (req, res) => {
+    try {
+        const task = await Task.findByIdAndDelete(req.params.id);
+        if (!task) {
+            res.statusCode = 404;
+            return res.send('Task not found.');
+        }
+        res.send(task);
+    } catch (e) {
+        res.statusCode = 500;
+        res.send(e);
+    }
+});
 
 app.listen(port, () => {
     console.log('Server is running on port' + port);
