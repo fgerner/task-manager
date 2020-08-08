@@ -102,6 +102,27 @@ app.get('/tasks/:id', async (req, res) => {
         res.statusCode = 500;
         res.send(e);
     }
+});
+
+app.patch('/tasks/:id', async (req, res) => {
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ["description", "completed"];
+    const isAllowedOperation = updates.every((update) => allowedUpdates.includes(update));
+    if (!isAllowedOperation) {
+        res.statusCode = 400;
+        return res.send({error: 'Not a valid update'})
+    }
+    try {
+        const task = await Task.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidations: true});
+        if (!task){
+            res.statusCode = 404;
+            return res.send('Task not found.');
+        }
+        res.send(task);
+    } catch (e) {
+        res.statusCode = 500;
+        res.send(e);
+    }
 })
 
 app.listen(port, () => {
