@@ -67,7 +67,7 @@ app.patch('/users/:id', async (req, res) => {
         res.send(e);
     }
 });
-d
+
 app.delete('/users/:id', async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
