@@ -10,7 +10,6 @@ app.use(express.json())
 app.use(userRoutes);
 app.use(taskRoutes);
 
-
 app.listen(port, () => {
-    console.log('Server is running on port' + port);
+    console.log(`Server is running on port ${port}`);
 });

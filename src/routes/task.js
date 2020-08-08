@@ -47,7 +47,9 @@ router.patch('/tasks/:id', async (req, res) => {
         return res.send({error: 'Not a valid update'})
     }
     try {
-        const task = await Task.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidations: true});
+        const task = await Task.findById(req.params.id);
+        updates.forEach((update) => task[update] = req.body[update]);
+        await task.save();
         if (!task) {
             res.statusCode = 404;
             return res.send('Task not found.');
