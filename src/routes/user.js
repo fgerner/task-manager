@@ -25,7 +25,20 @@ router.post('/users/login', async (req, res) => {
         res.statusCode = 400;
         res.send(e);
     }
-})
+});
+
+router.post('/users/logout', auth, async (req, res) => {
+    try {
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token;
+        });
+        await req.user.save();
+        res.send();
+    } catch (e) {
+        res.statusCode = 500;
+        res.send(e);
+    }
+});
 
 router.get('/users/me', auth, async (req, res) => {
     res.send(req.user);
