@@ -18,9 +18,14 @@ router.post('/tasks', auth, async (req, res) => {
     }
 });
 
+//GET completed '/tasks?completed=true||false
 router.get('/tasks', auth, async (req, res) => {
+    const match = {owner: req.user._id};
+    if (req.query.completed) {
+        match.completed = req.query.completed === 'true';
+    }
     try {
-        const tasks = await Task.find({owner: req.user._id});
+        const tasks = await Task.find(match);
         res.send(tasks);
     } catch (e) {
         res.statusCode = 500;
