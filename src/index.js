@@ -6,11 +6,6 @@ const taskRoutes = require('./routes/task');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// app.use((req, res, next) => {
-//     // res.statusCode = 503;
-//     // res.send('Site is disabled, sorry');
-//     next();
-// })
 
 app.use(express.json())
 app.use(userRoutes);

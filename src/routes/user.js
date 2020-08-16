@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/user');
 const auth = require('../middleware/auth');
+const upload = require('../middleware/upload');
 const router = express.Router();
 
 router.post('/users', async (req, res) => {
@@ -83,5 +84,12 @@ router.delete('/users/me', auth, async (req, res) => {
         res.send(e);
     }
 });
+
+router.post('/users/me/avatar', upload.single('avatar'), async (req, res) => {
+    res.send();
+}, (error, req, res, next) => {
+    res.statusCode = 400;
+    res.send({error: error.message});
+})
 
 module.exports = router;
