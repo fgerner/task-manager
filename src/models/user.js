@@ -40,7 +40,10 @@ const userSchema = new mongoose.Schema({
     },
     tokens: [{
         token: {type: String, required: true}
-    }]
+    }],
+    avatar: {
+        type: Buffer
+    }
 }, {
     timestamps: true
 });
@@ -49,7 +52,7 @@ userSchema.virtual('tasks', {
     ref: 'Task',
     localField: '_id',
     foreignField: 'owner'
-})
+});
 
 userSchema.methods.toJSON = function () {
     const user = this;
@@ -65,7 +68,7 @@ userSchema.methods.generateAuthToken = async function () {
     user.tokens = user.tokens.concat({token});
     await user.save();
     return token
-}
+};
 
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({email});
@@ -92,9 +95,9 @@ userSchema.pre('save', async function (next) {
 //Delete users tasks when user is removed
 userSchema.pre('remove', async function (next) {
     const user = this;
-    await Task.deleteMany({ owner: user._id});
+    await Task.deleteMany({owner: user._id});
     next();
-})
+});
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
