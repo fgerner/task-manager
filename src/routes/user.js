@@ -90,11 +90,10 @@ router.delete('/users/me', auth, async (req, res) => {
 });
 
 router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
-    const buffer = await sharp(req.file.buffer).resize({width: 250, height: 250}).png().toBuffer();
-    req.user.avatar = buffer;
+    req.user.avatar = await sharp(req.file.buffer).resize({width: 250, height: 250}).png().toBuffer();
     await req.user.save();
     res.send();
-}, (error, req, res, next) => {
+}, (error, req, res) => {
     res.statusCode = 400;
     res.send({error: error.message});
 });
