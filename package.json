@@ -4,13 +4,19 @@
   "description": "",
   "scripts": {
     "start": "node src/index.js",
-    "test": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "jest"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "author": "fred",
   "license": "ISC",
   "devDependencies": {
     "faker": "^4.1.0",
-    "nodemon": "^2.0.4"
+    "jest": "^26.4.1",
+    "nodemon": "^2.0.4",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.2.3",
