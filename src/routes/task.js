@@ -35,7 +35,6 @@ router.get('/tasks', auth, async (req, res) => {
     }
 
     try {
-        // const tasks = await Task.find(match);
         await req.user.populate({
             path: 'tasks',
             match,
